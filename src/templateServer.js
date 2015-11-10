@@ -25,7 +25,9 @@ function startUp(){
         default: "index.html"
     }));
 
-    server.listen(constants.configuration.apiPort,function(){
+    var serverPort = process.env.OPENSHIFT_NODEJS_PORT || constants.configuration.apiPort;
+    var ipAddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+    server.listen(serverPort,ipAddress,function(){
         console.log("Running Server on localhost:"+constants.configuration.apiPort);
     });
 
