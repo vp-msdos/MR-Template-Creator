@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Template Creator</title>
+    <script type="text/javascript" src="js/creator.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="stylesheet/indexcss.css">
+</head>
+<body ng-app="mergeRequest">
+<div ng-controller="MRController">
+<h3>MR Template Creator</h3>
+<form novalidate class="simple">
+<table>
+<tr><td><h4>Title </h4></td></tr>
+<tr>
+    <td><h5>Story Id :</h5></td>
+    <td><input type="text" id="story" placeholder="< Descriptive title of the change >" ng-model="mr.story" title="Title of the Merge Request shall contain:
+    Story Id or PR Id
+    Descriptive title of the change" required></td>
+    <td><h3>Output: </h3></td>
+    <td><textarea rows="4" cols="20" id="output" wrap="hard"></textarea></td>
+</tr>
+</table>
+<table>
+<tr><td><h4>Description</h4></td></tr>
+ <td><h5>Story :</h5></td>
+ <td><input type="text" id="storyId" placeholder="SB_MZ00_xxxxx: Story title goes here" ng-model="mr.storyId"></td>
+    <td><button id="button" type="submit" value="Submit" ng-click="update(mr)">Generate Template</button></td>
+</tr>
+    <tr>
+        <td><h5>Constraint:</h5></td>
+        <td><input type="text" id="constraints" placeholder="<constraint>" ng-model="mr.constraints" title="Constraint: A constraint identifiable in the MZ story confluence common constraint columns"></td>
+        <td><button id="btnreset" type="reset" value="Reset" ng-click="reset()">Reset</button></td>
+    </tr>
+    <tr>
+        <td><h5>Completes-increment:</h5></td>
+        <td><input type="text" id="increment" placeholder="<yes/no/reverted>" ng-model="mr.increment" title="Indication of increment completion (last merge request for increment identified by user story id and constraint).This is an indicator for I&V to start testing."></td>
+        <td><h5>SKIP_SMOKETEST</h5></td>
+        <td><input type="radio"id="skip1" name="skip" value="Yes" ng-model="mr.skip">Yes</td>
+        <td><input type="radio"id="skip2" name="skip" value="No" ng-model="mr.skip">No</td>
+    </tr>
+    <tr>
+        <td><h5>Longer description :</h5></td>
+        <td><textarea rows="4" cols="50" id="desc" ng-model="mr.desc" title="Free Text: Description of user story."></textarea></td>
+        <td><p><h5>MR_Template = {{ mr | json }}</h5></p></td>
+    </tr>
+    <tr>
+        <td><h5>SCT:</h5></td>
+        <td><input type="text" id="sct" placeholder="Interface changes" ng-model="mr.sct"></td>
+    </tr>
+    </table>
+    <table>
+        <thead>
+    <tr>
+        <th>Depends</th>
+        <th>Module</th>
+        <th>MR no</th>
+    </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td ><input type="radio"  id="yes" name="depends" value="Yes" ng-model="mr.depends">Yes
+                <input type="radio" id="no" name="depends" value="No" ng-model="mr.depends">No</td>
+            <td><select id="modu" name ="moduleName" ng-model="mr.moduleName"
+                data-ng-options="moduleName as moduleName.name for moduleName in module_Names"  ng-disabled="isDisable(mr)">
+                <option value=""></option>
+            </select></td>
+            <td><input type="text" id="mrNo" placeholder="MR no" ng-model="mr.mrNo" ng-disabled="isDisable(mr)"></td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+</div>
+<script>
+    angular.module('mergeRequest', [])
+            .controller('MRController', ['$scope', function($scope) {
+                $scope.MR_Template = {};
+
+                $scope.update = function(mr) {
+                    $scope.MR_Template = angular.copy(mr);
+                    collectValues(mr);
+                };
+                $scope.isDisable = function(mr){
+                    if(mr === undefined || mr.depends === undefined){
+                        return true;
+                    }
+                    if(mr !== undefined && mr.depends === "No"){
+                        return true;
+                    }else{
+                        return false;
+                    }
+
+                };
+                $scope.module_Names=[{id:"pde",name:"megazone/pde-generator"},
+                    {id:"sctp",name:"megazone/sctp_gw"},{id:"siteoam",name:"megazone/siteoam"}];
+             }]);
+
+</script>
+</body>
+</html>

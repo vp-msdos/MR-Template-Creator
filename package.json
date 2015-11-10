@@ -1,0 +1,22 @@
+{
+  "name": "MR-Template-Creator",
+  "version": "0.0.1",
+  "description": "MR-Template-Creator",
+  "main": "src/templateServer.js",
+  "scripts":{
+    "start":"node src/templateServer.js"
+  },
+  "private": true,
+  "author": "Vishwas",
+  "license": "Proprietary",
+  "dependencies": {
+    "node-uuid": "1.4.1",
+    "config" : "1.10.0",
+    "JSONPath" : "0.10.0",
+    "underscore": "1.8.2",
+    "restify": "2.6.0"
+  },
+  "engines": {
+    "node": "0.12.x"
+  }
+}
